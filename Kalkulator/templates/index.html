@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="id" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Forest Dew Calculator</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Mono:wght@300;400;500&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <div class="forest-bg">
+    <div class="dew-drop" style="--x:10%;--y:20%;--s:0.4;--d:0s"></div>
+    <div class="dew-drop" style="--x:80%;--y:10%;--s:0.6;--d:1.2s"></div>
+    <div class="dew-drop" style="--x:50%;--y:70%;--s:0.3;--d:0.6s"></div>
+    <div class="dew-drop" style="--x:25%;--y:85%;--s:0.5;--d:2s"></div>
+    <div class="dew-drop" style="--x:90%;--y:55%;--s:0.35;--d:1.5s"></div>
+    <div class="leaf" style="--x:5%;--y:15%;--r:-20deg"></div>
+    <div class="leaf" style="--x:88%;--y:75%;--r:35deg"></div>
+    <div class="leaf" style="--x:60%;--y:5%;--r:10deg"></div>
+  </div>
+
+  <div class="app-wrapper">
+    <header class="app-header">
+      <div class="logo">
+        <span class="logo-icon">🌿</span>
+        <span class="logo-text">Forest Dew Calc</span>
+      </div>
+      <button class="theme-toggle" id="themeToggle" title="Toggle Theme">
+        <span class="toggle-icon sun">☀️</span>
+        <span class="toggle-icon moon">🌙</span>
+        <div class="toggle-pill"></div>
+      </button>
+    </header>
+
+    <nav class="tab-nav">
+      <button class="tab-btn active" data-tab="arithmetic">
+        <span class="tab-icon">➕</span><span>Aritmatika</span>
+      </button>
+      <button class="tab-btn" data-tab="logic">
+        <span class="tab-icon">⊕</span><span>Logika/Bitwise</span>
+      </button>
+      <button class="tab-btn" data-tab="conversion">
+        <span class="tab-icon">🔄</span><span>Konversi</span>
+      </button>
+      <button class="tab-btn" data-tab="factorial">
+        <span class="tab-icon">n!</span><span>Faktorial</span>
+      </button>
+    </nav>
+
+    <main class="calc-main">
+      <!-- ARITHMETIC -->
+      <section class="tab-panel active" id="tab-arithmetic">
+        <div class="display-box">
+          <div class="display-expr" id="arith-expr">0</div>
+          <div class="display-result" id="arith-result"></div>
+        </div>
+        <div class="btn-grid arith-grid">
+          <button class="calc-btn fn" data-action="clear">C</button>
+          <button class="calc-btn fn" data-action="sign">±</button>
+          <button class="calc-btn fn" data-action="percent">%</button>
+          <button class="calc-btn op" data-action="op" data-val="/">÷</button>
+          <button class="calc-btn num" data-action="num" data-val="7">7</button>
+          <button class="calc-btn num" data-action="num" data-val="8">8</button>
+          <button class="calc-btn num" data-action="num" data-val="9">9</button>
+          <button class="calc-btn op" data-action="op" data-val="*">×</button>
+          <button class="calc-btn num" data-action="num" data-val="4">4</button>
+          <button class="calc-btn num" data-action="num" data-val="5">5</button>
+          <button class="calc-btn num" data-action="num" data-val="6">6</button>
+          <button class="calc-btn op" data-action="op" data-val="-">−</button>
+          <button class="calc-btn num" data-action="num" data-val="1">1</button>
+          <button class="calc-btn num" data-action="num" data-val="2">2</button>
+          <button class="calc-btn num" data-action="num" data-val="3">3</button>
+          <button class="calc-btn op" data-action="op" data-val="+">+</button>
+          <button class="calc-btn num wide" data-action="num" data-val="0">0</button>
+          <button class="calc-btn num" data-action="dot">.</button>
+          <button class="calc-btn eq" data-action="equals">=</button>
+          <button class="calc-btn fn" data-action="sqrt">√</button>
+          <button class="calc-btn fn" data-action="pow">xʸ</button>
+          <button class="calc-btn fn" data-action="backspace">⌫</button>
+          <button class="calc-btn fn" data-action="history">📋</button>
+        </div>
+        <div class="history-panel" id="arith-history">
+          <h4 class="history-title">🕓 Riwayat Perhitungan</h4>
+          <ul id="history-list"></ul>
+        </div>
+      </section>
+
+      <!-- LOGIC/BITWISE -->
+      <section class="tab-panel" id="tab-logic">
+        <div class="logic-container">
+          <h2 class="section-title">Kalkulator Logika &amp; Bitwise</h2>
+          <div class="input-row">
+            <div class="input-group">
+              <label>Nilai A</label>
+              <input type="number" id="logic-a" placeholder="contoh: 12" />
+              <span class="bin-preview" id="bin-a"></span>
+            </div>
+            <div class="input-group">
+              <label>Nilai B</label>
+              <input type="number" id="logic-b" placeholder="contoh: 10" />
+              <span class="bin-preview" id="bin-b"></span>
+            </div>
+          </div>
+          <div class="op-grid">
+            <button class="op-btn" data-op="AND">AND</button>
+            <button class="op-btn" data-op="OR">OR</button>
+            <button class="op-btn" data-op="XOR">XOR</button>
+            <button class="op-btn" data-op="NAND">NAND</button>
+            <button class="op-btn" data-op="NOR">NOR</button>
+            <button class="op-btn" data-op="XNOR">XNOR</button>
+            <button class="op-btn" data-op="NOT_A">NOT A</button>
+            <button class="op-btn" data-op="LSHIFT">A &lt;&lt; 1</button>
+            <button class="op-btn" data-op="RSHIFT">A &gt;&gt; 1</button>
+          </div>
+          <div class="logic-result-box" id="logic-result-box">
+            <p class="result-placeholder">Pilih operasi untuk melihat hasil</p>
+          </div>
+          <div class="truth-table-section">
+            <h3>Tabel Kebenaran (1-bit)</h3>
+            <table class="truth-table">
+              <thead><tr><th>A</th><th>B</th><th>AND</th><th>OR</th><th>XOR</th></tr></thead>
+              <tbody>
+                <tr><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+                <tr><td>0</td><td>1</td><td>0</td><td>1</td><td>1</td></tr>
+                <tr><td>1</td><td>0</td><td>0</td><td>1</td><td>1</td></tr>
+                <tr><td>1</td><td>1</td><td>1</td><td>1</td><td>0</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- CONVERSION -->
+      <section class="tab-panel" id="tab-conversion">
+        <h2 class="section-title">Konversi</h2>
+        <div class="conv-tabs">
+          <button class="conv-tab active" data-conv="base">Basis Bilangan</button>
+          <button class="conv-tab" data-conv="temp">Suhu</button>
+          <button class="conv-tab" data-conv="currency">Mata Uang</button>
+        </div>
+
+        <div class="conv-panel active" id="conv-base">
+          <div class="base-grid">
+            <div class="base-input-group">
+              <label>Desimal (Base 10)</label>
+              <input type="number" id="base-dec" placeholder="0" />
+            </div>
+            <div class="base-input-group">
+              <label>Biner (Base 2)</label>
+              <input type="text" id="base-bin" placeholder="0" />
+            </div>
+            <div class="base-input-group">
+              <label>Oktal (Base 8)</label>
+              <input type="text" id="base-oct" placeholder="0" />
+            </div>
+            <div class="base-input-group">
+              <label>Heksadesimal (Base 16)</label>
+              <input type="text" id="base-hex" placeholder="0" />
+            </div>
+          </div>
+          <button class="conv-clear-btn" id="base-reset-btn">Reset</button>
+        </div>
+
+        <div class="conv-panel" id="conv-temp">
+          <div class="temp-container">
+            <div class="temp-input-group">
+              <label>Nilai Suhu</label>
+              <input type="number" id="temp-val" placeholder="0" />
+            </div>
+            <div class="temp-input-group">
+              <label>Dari Satuan</label>
+              <select id="temp-from">
+                <option value="C">Celsius (°C)</option>
+                <option value="F">Fahrenheit (°F)</option>
+                <option value="K">Kelvin (K)</option>
+                <option value="R">Rankine (°R)</option>
+              </select>
+            </div>
+            <button class="conv-calc-btn" id="temp-calc-btn">🌡️ Konversi Suhu</button>
+            <div class="temp-results" id="temp-results"></div>
+          </div>
+        </div>
+
+        <div class="conv-panel" id="conv-currency">
+          <div class="currency-container">
+            <p class="currency-note">⚠️ Kurs perkiraan (tidak real-time). Gunakan server Python untuk akurasi penuh.</p>
+            <div class="currency-row">
+              <input type="number" id="curr-amount" placeholder="Jumlah" value="1"/>
+              <select id="curr-from">
+                <option value="IDR" selected>IDR - Rupiah Indonesia</option>
+                <option value="USD">USD - Dolar Amerika</option>
+                <option value="EUR">EUR - Euro</option>
+                <option value="GBP">GBP - Pound Sterling</option>
+                <option value="JPY">JPY - Yen Jepang</option>
+                <option value="SGD">SGD - Dolar Singapura</option>
+                <option value="MYR">MYR - Ringgit Malaysia</option>
+                <option value="AUD">AUD - Dolar Australia</option>
+                <option value="CNY">CNY - Yuan Tiongkok</option>
+                <option value="SAR">SAR - Riyal Saudi</option>
+              </select>
+            </div>
+            <div class="currency-row">
+              <div class="curr-result-box" id="curr-result">—</div>
+              <select id="curr-to">
+                <option value="USD" selected>USD - Dolar Amerika</option>
+                <option value="IDR">IDR - Rupiah Indonesia</option>
+                <option value="EUR">EUR - Euro</option>
+                <option value="GBP">GBP - Pound Sterling</option>
+                <option value="JPY">JPY - Yen Jepang</option>
+                <option value="SGD">SGD - Dolar Singapura</option>
+                <option value="MYR">MYR - Ringgit Malaysia</option>
+                <option value="AUD">AUD - Dolar Australia</option>
+                <option value="CNY">CNY - Yuan Tiongkok</option>
+                <option value="SAR">SAR - Riyal Saudi</option>
+              </select>
+            </div>
+            <button class="conv-calc-btn" id="curr-calc-btn">💱 Hitung Kurs</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- FACTORIAL -->
+      <section class="tab-panel" id="tab-factorial">
+        <div class="factorial-container">
+          <h2 class="section-title">Faktorial &amp; Kombinatorika</h2>
+          <div class="factorial-input-row">
+            <div class="fact-input-group">
+              <label>n</label>
+              <input type="number" id="fact-n" placeholder="0" min="0" max="170"/>
+            </div>
+            <div class="fact-input-group">
+              <label>r (untuk P &amp; C)</label>
+              <input type="number" id="fact-r" placeholder="0" min="0"/>
+            </div>
+          </div>
+          <div class="factorial-ops">
+            <button class="fact-btn" id="btn-factorial">n! Faktorial</button>
+            <button class="fact-btn" id="btn-permutation">P(n,r) Permutasi</button>
+            <button class="fact-btn" id="btn-combination">C(n,r) Kombinasi</button>
+          </div>
+          <div class="fact-result-box" id="fact-result">
+            <p class="result-placeholder">Masukkan nilai dan pilih operasi</p>
+          </div>
+          <div class="factorial-table-section">
+            <h3>Tabel Faktorial (0–15)</h3>
+            <div class="fact-table-wrapper">
+              <table class="fact-table" id="fact-table"></table>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="js/app.js"></script>
+</body>
+</html>
