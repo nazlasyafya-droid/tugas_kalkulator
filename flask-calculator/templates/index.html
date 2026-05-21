@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="id" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ForestCalc — Kalkulator Canggih</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=DM+Mono:wght@300;400;500&family=Nunito:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+
+<!-- Ambient Background Particles -->
+<div class="ambient-bg">
+  <div class="dew-drop" style="--x:10%;--y:20%;--s:6px;--d:0s"></div>
+  <div class="dew-drop" style="--x:85%;--y:15%;--s:4px;--d:1.2s"></div>
+  <div class="dew-drop" style="--x:50%;--y:70%;--s:8px;--d:0.5s"></div>
+  <div class="dew-drop" style="--x:25%;--y:55%;--s:5px;--d:2s"></div>
+  <div class="dew-drop" style="--x:70%;--y:40%;--s:3px;--d:0.8s"></div>
+  <div class="dew-drop" style="--x:90%;--y:75%;--s:6px;--d:1.5s"></div>
+  <div class="dew-drop" style="--x:5%;--y:85%;--s:4px;--d:2.5s"></div>
+  <div class="dew-drop" style="--x:60%;--y:90%;--s:5px;--d:0.3s"></div>
+  <div class="leaf leaf-1">🌿</div>
+  <div class="leaf leaf-2">🍃</div>
+  <div class="leaf leaf-3">🌱</div>
+</div>
+
+<!-- Header -->
+<header class="app-header">
+  <div class="header-content">
+    <div class="logo">
+      <span class="logo-icon">🌿</span>
+      <div>
+        <h1 class="logo-title">ForestCalc</h1>
+        <p class="logo-sub">Kalkulator Canggih Berbasis Web</p>
+      </div>
+    </div>
+    <div class="header-actions">
+      <button class="btn-history-toggle" onclick="toggleHistory()">
+        <span>📋</span> Riwayat
+      </button>
+      <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle theme">
+        <span class="theme-icon">🌙</span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main class="app-main">
+  <!-- Tab Navigation -->
+  <nav class="tab-nav">
+    <button class="tab-btn active" data-tab="arithmetic" onclick="switchTab('arithmetic', this)">
+      <span>🔢</span>
+      <span class="tab-label">Aritmatika</span>
+    </button>
+    <button class="tab-btn" data-tab="logic" onclick="switchTab('logic', this)">
+      <span>⚡</span>
+      <span class="tab-label">Logika</span>
+    </button>
+    <button class="tab-btn" data-tab="transform" onclick="switchTab('transform', this)">
+      <span>🔄</span>
+      <span class="tab-label">Transformasi</span>
+    </button>
+  </nav>
+
+  <div class="content-layout">
+    <!-- Main Calculator Panel -->
+    <div class="calculator-panel">
+
+      <!-- ===== ARITHMETIC TAB ===== -->
+      <div id="tab-arithmetic" class="tab-content active">
+        <div class="section-header">
+          <h2>🔢 Operasi Aritmatika</h2>
+          <p>Perhitungan matematika dasar hingga lanjutan</p>
+        </div>
+
+        <div class="input-group-row">
+          <div class="input-wrap">
+            <label>Angka A</label>
+            <input type="number" id="arith-a" placeholder="Masukkan angka..." step="any">
+          </div>
+          <div class="input-wrap" id="arith-b-wrap">
+            <label>Angka B</label>
+            <input type="number" id="arith-b" placeholder="Masukkan angka..." step="any">
+          </div>
+        </div>
+
+        <div class="op-grid">
+          <button class="op-btn" onclick="calcArithmetic('add')">
+            <span class="op-symbol">+</span>
+            <span class="op-name">Tambah</span>
+          </button>
+          <button class="op-btn" onclick="calcArithmetic('subtract')">
+            <span class="op-symbol">−</span>
+            <span class="op-name">Kurang</span>
+          </button>
+          <button class="op-btn" onclick="calcArithmetic('multiply')">
+            <span class="op-symbol">×</span>
+            <span class="op-name">Kali</span>
+          </button>
+          <button class="op-btn" onclick="calcArithmetic('divide')">
+            <span class="op-symbol">÷</span>
+            <span class="op-name">Bagi</span>
+          </button>
+          <button class="op-btn" onclick="calcArithmetic('power')">
+            <span class="op-symbol">xⁿ</span>
+            <span class="op-name">Pangkat</span>
+          </button>
+          <button class="op-btn single-input" onclick="calcArithmetic('sqrt')">
+            <span class="op-symbol">√x</span>
+            <span class="op-name">Akar</span>
+          </button>
+          <button class="op-btn" onclick="calcArithmetic('modulus')">
+            <span class="op-symbol">mod</span>
+            <span class="op-name">Modulus</span>
+          </button>
+          <button class="op-btn" onclick="calcArithmetic('floor_div')">
+            <span class="op-symbol">//</span>
+            <span class="op-name">Floor Div</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- ===== LOGIC TAB ===== -->
+      <div id="tab-logic" class="tab-content">
+        <div class="section-header">
+          <h2>⚡ Operator Logika</h2>
+          <p>Operasi bitwise dan gerbang logika</p>
+        </div>
+
+        <div class="input-group-row">
+          <div class="input-wrap">
+            <label>Nilai A (integer)</label>
+            <input type="number" id="logic-a" placeholder="Contoh: 5" step="1">
+          </div>
+          <div class="input-wrap" id="logic-b-wrap">
+            <label>Nilai B (integer)</label>
+            <input type="number" id="logic-b" placeholder="Contoh: 3" step="1">
+          </div>
+        </div>
+
+        <div class="op-grid">
+          <button class="op-btn logic-btn" onclick="calcLogic('and')">
+            <span class="op-symbol">AND</span>
+            <span class="op-name">Bitwise AND</span>
+          </button>
+          <button class="op-btn logic-btn" onclick="calcLogic('or')">
+            <span class="op-symbol">OR</span>
+            <span class="op-name">Bitwise OR</span>
+          </button>
+          <button class="op-btn logic-btn single-input" onclick="calcLogic('not')">
+            <span class="op-symbol">NOT</span>
+            <span class="op-name">Bitwise NOT</span>
+          </button>
+          <button class="op-btn logic-btn" onclick="calcLogic('xor')">
+            <span class="op-symbol">XOR</span>
+            <span class="op-name">Exclusive OR</span>
+          </button>
+          <button class="op-btn logic-btn" onclick="calcLogic('nand')">
+            <span class="op-symbol">NAND</span>
+            <span class="op-name">NOT AND</span>
+          </button>
+          <button class="op-btn logic-btn" onclick="calcLogic('nor')">
+            <span class="op-symbol">NOR</span>
+            <span class="op-name">NOT OR</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- ===== TRANSFORM TAB ===== -->
+      <div id="tab-transform" class="tab-content">
+        <div class="section-header">
+          <h2>🔄 Transformasi Bilangan</h2>
+          <p>Konversi basis, suhu, mata uang, faktorial & Fibonacci</p>
+        </div>
+
+        <!-- Sub-tabs -->
+        <div class="sub-tab-nav">
+          <button class="sub-tab active" onclick="switchSubTab('base', this)">🔢 Basis</button>
+          <button class="sub-tab" onclick="switchSubTab('temperature', this)">🌡️ Suhu</button>
+          <button class="sub-tab" onclick="switchSubTab('currency', this)">💰 Mata Uang</button>
+          <button class="sub-tab" onclick="switchSubTab('special', this)">✨ Spesial</button>
+        </div>
+
+        <!-- Base Conversion -->
+        <div id="subtab-base" class="sub-tab-content active">
+          <div class="input-group-row">
+            <div class="input-wrap flex-2">
+              <label>Nilai Input</label>
+              <input type="text" id="base-value" placeholder="Masukkan nilai..." style="text-transform:uppercase">
+            </div>
+            <div class="input-wrap">
+              <label>Basis Asal</label>
+              <select id="base-from" class="styled-select">
+                <option value="decimal">Desimal (10)</option>
+                <option value="binary">Biner (2)</option>
+                <option value="octal">Oktal (8)</option>
+                <option value="hex">Heksadesimal (16)</option>
+              </select>
+            </div>
+          </div>
+          <button class="calc-btn" onclick="calcBase()">🔄 Konversi Semua Basis</button>
+          
+          <div id="base-results" class="multi-result hidden">
+            <div class="result-card-grid">
+              <div class="result-card-item">
+                <span class="rc-label">Desimal (10)</span>
+                <span class="rc-value" id="res-decimal">—</span>
+              </div>
+              <div class="result-card-item">
+                <span class="rc-label">Biner (2)</span>
+                <span class="rc-value" id="res-binary">—</span>
+              </div>
+              <div class="result-card-item">
+                <span class="rc-label">Oktal (8)</span>
+                <span class="rc-value" id="res-octal">—</span>
+              </div>
+              <div class="result-card-item">
+                <span class="rc-label">Heksa (16)</span>
+                <span class="rc-value" id="res-hex">—</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Temperature Conversion -->
+        <div id="subtab-temperature" class="sub-tab-content">
+          <div class="input-group-row">
+            <div class="input-wrap flex-2">
+              <label>Nilai Suhu</label>
+              <input type="number" id="temp-value" placeholder="Masukkan suhu..." step="any">
+            </div>
+            <div class="input-wrap">
+              <label>Satuan Asal</label>
+              <select id="temp-from" class="styled-select">
+                <option value="celsius">Celsius (°C)</option>
+                <option value="fahrenheit">Fahrenheit (°F)</option>
+                <option value="kelvin">Kelvin (K)</option>
+                <option value="reamur">Réaumur (°R)</option>
+              </select>
+            </div>
+          </div>
+          <button class="calc-btn" onclick="calcTemperature()">🌡️ Konversi Suhu</button>
+          
+          <div id="temp-results" class="multi-result hidden">
+            <div class="result-card-grid">
+              <div class="result-card-item">
+                <span class="rc-label">Celsius °C</span>
+                <span class="rc-value" id="res-celsius">—</span>
+              </div>
+              <div class="result-card-item">
+                <span class="rc-label">Fahrenheit °F</span>
+                <span class="rc-value" id="res-fahrenheit">—</span>
+              </div>
+              <div class="result-card-item">
+                <span class="rc-label">Kelvin K</span>
+                <span class="rc-value" id="res-kelvin">—</span>
+              </div>
+              <div class="result-card-item">
+                <span class="rc-label">Réaumur °R</span>
+                <span class="rc-value" id="res-reamur">—</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Currency Conversion -->
+        <div id="subtab-currency" class="sub-tab-content">
+          <div class="input-group-row">
+            <div class="input-wrap flex-2">
+              <label>Jumlah</label>
+              <input type="number" id="curr-amount" placeholder="Masukkan jumlah..." step="any">
+            </div>
+            <div class="input-wrap">
+              <label>Mata Uang Asal</label>
+              <select id="curr-from" class="styled-select">
+                <option value="IDR">IDR — Rupiah</option>
+                <option value="USD">USD — US Dollar</option>
+                <option value="EUR">EUR — Euro</option>
+                <option value="SGD">SGD — Singapore Dollar</option>
+                <option value="JPY">JPY — Yen</option>
+                <option value="GBP">GBP — Pound</option>
+                <option value="AUD">AUD — Australian Dollar</option>
+                <option value="MYR">MYR — Ringgit</option>
+              </select>
+            </div>
+          </div>
+          <p class="rate-note">⚠️ Rate statis. Diperbarui terakhir: Jan 2025</p>
+          <button class="calc-btn" onclick="calcCurrency()">💱 Konversi Mata Uang</button>
+          
+          <div id="curr-results" class="multi-result hidden">
+            <div class="result-card-grid curr-grid" id="curr-result-grid"></div>
+          </div>
+        </div>
+
+        <!-- Special: Factorial & Fibonacci -->
+        <div id="subtab-special" class="sub-tab-content">
+          <div class="special-grid">
+            <div class="special-card">
+              <h3>🎲 Faktorial</h3>
+              <p class="special-desc">n! = n × (n-1) × ... × 1</p>
+              <div class="input-wrap">
+                <label>Nilai n (0–20)</label>
+                <input type="number" id="factorial-n" placeholder="Contoh: 7" min="0" max="20" step="1">
+              </div>
+              <button class="calc-btn" onclick="calcFactorial()">Hitung n!</button>
+            </div>
+            <div class="special-card">
+              <h3>🌀 Fibonacci</h3>
+              <p class="special-desc">F(n) = F(n-1) + F(n-2)</p>
+              <div class="input-wrap">
+                <label>Suku ke-n (0–30)</label>
+                <input type="number" id="fibonacci-n" placeholder="Contoh: 10" min="0" max="30" step="1">
+              </div>
+              <button class="calc-btn" onclick="calcFibonacci()">Hitung F(n)</button>
+            </div>
+          </div>
+          <div id="fib-sequence" class="fib-display hidden"></div>
+        </div>
+
+      </div><!-- end tab-transform -->
+    </div><!-- end calculator-panel -->
+
+    <!-- Result & Steps Panel -->
+    <div class="result-panel" id="result-panel">
+      <div class="result-panel-inner">
+        <div id="result-placeholder" class="result-placeholder">
+          <div class="placeholder-icon">🌿</div>
+          <p>Pilih operasi dan masukkan angka<br>untuk melihat hasil perhitungan</p>
+        </div>
+        <div id="result-display" class="hidden">
+          <div class="result-badge">
+            <span class="result-label">Hasil</span>
+            <span class="result-value" id="main-result">—</span>
+          </div>
+          <div class="formula-box">
+            <span class="formula-label">📐 Rumus</span>
+            <code class="formula-text" id="formula-text">—</code>
+          </div>
+          <div class="steps-box">
+            <span class="steps-label">📝 Langkah-langkah</span>
+            <ol class="steps-list" id="steps-list"></ol>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<!-- History Sidebar -->
+<aside class="history-sidebar" id="history-sidebar">
+  <div class="history-header">
+    <h3>📋 Riwayat Perhitungan</h3>
+    <div class="history-actions">
+      <button class="btn-clear" onclick="clearHistory()">🗑️ Hapus</button>
+      <button class="btn-close" onclick="toggleHistory()">✕</button>
+    </div>
+  </div>
+  <div class="history-list" id="history-list">
+    <p class="history-empty">Belum ada riwayat perhitungan</p>
+  </div>
+</aside>
+<div class="history-overlay hidden" id="history-overlay" onclick="toggleHistory()"></div>
+
+<!-- Toast Notification -->
+<div class="toast" id="toast"></div>
+
+<script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>
