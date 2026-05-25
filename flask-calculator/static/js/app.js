@@ -376,3 +376,5 @@ document.addEventListener('keydown', (e) => {
 
 // Load history on page start
 loadHistory();
+
+
