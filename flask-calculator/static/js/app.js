@@ -2,6 +2,62 @@
 // FOREST DEW CALCULATOR — JavaScript
 // ============================================
 
+// ---- SOUND EFFECTS ----
+const AudioCtx = window.AudioContext || window.webkitAudioContext;
+let audioCtx;
+
+function playClick() {
+  try {
+    if (!audioCtx) audioCtx = new AudioCtx();
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.connect(gain);
+    gain.connect(audioCtx.destination);
+    osc.type = 'sine';
+    osc.frequency.setValueAtTime(800, audioCtx.currentTime);
+    osc.frequency.exponentialRampToValueAtTime(400, audioCtx.currentTime + 0.05);
+    gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.08);
+    osc.start(audioCtx.currentTime);
+    osc.stop(audioCtx.currentTime + 0.08);
+  } catch(e) {}
+}
+
+function playSuccess() {
+  try {
+    if (!audioCtx) audioCtx = new AudioCtx();
+    [523, 659, 784].forEach((freq, i) => {
+      const osc = audioCtx.createOscillator();
+      const gain = audioCtx.createGain();
+      osc.connect(gain);
+      gain.connect(audioCtx.destination);
+      osc.type = 'sine';
+      osc.frequency.value = freq;
+      gain.gain.setValueAtTime(0.1, audioCtx.currentTime + i * 0.08);
+      gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + i * 0.08 + 0.15);
+      osc.start(audioCtx.currentTime + i * 0.08);
+      osc.stop(audioCtx.currentTime + i * 0.08 + 0.15);
+    });
+  } catch(e) {}
+}
+
+function playError() {
+  try {
+    if (!audioCtx) audioCtx = new AudioCtx();
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.connect(gain);
+    gain.connect(audioCtx.destination);
+    osc.type = 'sawtooth';
+    osc.frequency.setValueAtTime(300, audioCtx.currentTime);
+    osc.frequency.exponentialRampToValueAtTime(150, audioCtx.currentTime + 0.15);
+    gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.15);
+    osc.start(audioCtx.currentTime);
+    osc.stop(audioCtx.currentTime + 0.15);
+  } catch(e) {}
+}
+
 // ---- THEME TOGGLE ----
 function toggleTheme() {
   const html = document.documentElement;
@@ -9,6 +65,7 @@ function toggleTheme() {
   html.setAttribute('data-theme', isDark ? 'light' : 'dark');
   document.querySelector('.theme-icon').textContent = isDark ? '🌙' : '☀️';
   localStorage.setItem('theme', isDark ? 'light' : 'dark');
+  playClick();
 }
 
 // Load saved theme
@@ -20,6 +77,7 @@ function toggleTheme() {
 
 // ---- TAB SWITCHING ----
 function switchTab(tabId, btn) {
+  playClick();
   document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
   document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
   document.getElementById('tab-' + tabId).classList.add('active');
@@ -28,6 +86,7 @@ function switchTab(tabId, btn) {
 }
 
 function switchSubTab(subId, btn) {
+  playClick();
   document.querySelectorAll('.sub-tab-content').forEach(t => t.classList.remove('active'));
   document.querySelectorAll('.sub-tab').forEach(b => b.classList.remove('active'));
   document.getElementById('subtab-' + subId).classList.add('active');
@@ -36,6 +95,8 @@ function switchSubTab(subId, btn) {
 
 // ---- RESULT DISPLAY ----
 function showResult(result, formula, steps, isError = false) {
+  if (isError) playError(); else playSuccess();
+
   const placeholder = document.getElementById('result-placeholder');
   const display = document.getElementById('result-display');
   const badge = display.querySelector('.result-badge');
@@ -56,14 +117,12 @@ function showResult(result, formula, steps, isError = false) {
     mainResult.textContent = result;
     formulaText.textContent = formula;
     stepsList.innerHTML = steps.map(s => `<li>${escHtml(s)}</li>`).join('');
-    
-    // Animate badge
+
     badge.style.animation = 'none';
     badge.offsetHeight;
     badge.style.animation = 'fadeSlideIn 0.4s ease';
   }
 
-  // Scroll result panel into view on mobile
   if (window.innerWidth <= 900) {
     document.querySelector('.result-panel').scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
@@ -80,11 +139,8 @@ function escHtml(str) {
   return div.innerHTML;
 }
 
-// ---- SINGLE INPUT OPS (hides B input) ----
 document.querySelectorAll('.single-input').forEach(btn => {
-  btn.addEventListener('click', () => {
-    // highlight only, handled in calc functions
-  });
+  btn.addEventListener('click', () => {});
 });
 
 function needsOneInput(op) {
@@ -93,6 +149,7 @@ function needsOneInput(op) {
 
 // ---- ARITHMETIC CALCULATIONS ----
 async function calcArithmetic(op) {
+  playClick();
   const a = document.getElementById('arith-a').value;
   const b = document.getElementById('arith-b').value;
 
@@ -122,6 +179,7 @@ async function calcArithmetic(op) {
 
 // ---- LOGIC CALCULATIONS ----
 async function calcLogic(op) {
+  playClick();
   const a = document.getElementById('logic-a').value;
   const b = document.getElementById('logic-b').value;
 
@@ -143,12 +201,13 @@ async function calcLogic(op) {
       loadHistory();
     }
   } catch (e) {
-    showResult('Koneksi gagal. Coba lagi.', '', [], true);
+    showResult('Koneksi gagal.', '', [], true);
   }
 }
 
 // ---- BASE CONVERSION ----
 async function calcBase() {
+  playClick();
   const value = document.getElementById('base-value').value.trim();
   const fromBase = document.getElementById('base-from').value;
 
@@ -181,6 +240,7 @@ async function calcBase() {
 
 // ---- TEMPERATURE CONVERSION ----
 async function calcTemperature() {
+  playClick();
   const value = document.getElementById('temp-value').value;
   const fromUnit = document.getElementById('temp-from').value;
 
@@ -214,6 +274,7 @@ async function calcTemperature() {
 const CURR_SYMBOLS = { IDR: 'Rp', USD: '$', EUR: '€', SGD: 'S$', JPY: '¥', GBP: '£', AUD: 'A$', MYR: 'RM' };
 
 async function calcCurrency() {
+  playClick();
   const amount = document.getElementById('curr-amount').value;
   const fromCurr = document.getElementById('curr-from').value;
 
@@ -255,6 +316,7 @@ async function calcCurrency() {
 
 // ---- FACTORIAL ----
 async function calcFactorial() {
+  playClick();
   const n = document.getElementById('factorial-n').value;
   if (n === '') { showToast('⚠️ Masukkan nilai n!'); return; }
 
@@ -279,6 +341,7 @@ async function calcFactorial() {
 
 // ---- FIBONACCI ----
 async function calcFibonacci() {
+  playClick();
   const n = document.getElementById('fibonacci-n').value;
   if (n === '') { showToast('⚠️ Masukkan nilai n!'); return; }
 
@@ -294,8 +357,7 @@ async function calcFibonacci() {
       showResult(data.error, '', [], true);
     } else {
       showResult('F(' + n + ') = ' + data.result, data.formula, data.steps);
-      
-      // Show sequence
+
       const fibDiv = document.getElementById('fib-sequence');
       const seq = data.sequence;
       const seqStr = seq.join(', ') + (seq.length < parseInt(n) + 1 ? ', ...' : '');
@@ -333,6 +395,7 @@ function renderHistory(history) {
 }
 
 async function clearHistory() {
+  playClick();
   try {
     await fetch('/api/history/clear', { method: 'POST' });
     renderHistory([]);
@@ -341,13 +404,14 @@ async function clearHistory() {
 }
 
 function toggleHistory() {
+  playClick();
   const sidebar = document.getElementById('history-sidebar');
   const overlay = document.getElementById('history-overlay');
   const isOpen = sidebar.classList.contains('open');
-  
+
   sidebar.classList.toggle('open', !isOpen);
   overlay.classList.toggle('hidden', isOpen);
-  
+
   if (!isOpen) loadHistory();
 }
 
@@ -366,15 +430,12 @@ document.addEventListener('keydown', (e) => {
   if (e.key === 'Enter') {
     const activeTab = document.querySelector('.tab-content.active');
     if (!activeTab) return;
-    
     const tabId = activeTab.id;
     if (tabId === 'tab-arithmetic') {
-      // Do nothing — user must pick operation
+      // user must pick operation button
     }
   }
 });
 
 // Load history on page start
 loadHistory();
-
-
