@@ -5,7 +5,7 @@ import json
 app = Flask(__name__)
 app.secret_key = 'forest-dew-calculator-2024'
 
-# Static currency rates (IDR base)
+
 CURRENCY_RATES = {
     'IDR': 1,
     'USD': 0.000063,
