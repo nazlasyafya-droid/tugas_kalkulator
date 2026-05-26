@@ -1,7 +1,3 @@
-// ============================================
-// FOREST DEW CALCULATOR — JavaScript
-// ============================================
-
 // ---- SOUND EFFECTS ----
 const AudioCtx = window.AudioContext || window.webkitAudioContext;
 let audioCtx;
